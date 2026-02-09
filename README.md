@@ -22,7 +22,7 @@ to rigorously test whether LLMs can integrate **contextual constraints** into ca
   Moves beyond binary causal pairs to a structured **4-tuple** formulation:
   - **T**: Treatment  
   - **O**: Outcome  
-  - **D**: Direction of causal effect (`+`, `-`, `None`, `mixed`)  
+  - **D**: Direction of causal effect (`+`, `-`, `None`, `Mixed`)  
   - **C**: Socio-economic context (institutional, temporal, geographic)
 
 - **Empirical Rigor**  
