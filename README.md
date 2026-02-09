@@ -131,7 +131,7 @@ Please refer to the LICENSE file for the full license terms.
 
 ## 📝 Citation
 If you use EconCausal in your research, please cite the following paper:
-```bash
+```bibtex
 @inproceedings{lee2026econcausal,
   title     = {EconCausal: A Context-Aware Causal Reasoning Benchmark for LLMs in Social Science},
   author    = {Lee, Donggyu and Yun, Hyeok and Cha, Meeyoung and Park, Sungwon and Park, Sangyoon and Kim, Jihee},
