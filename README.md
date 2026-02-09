@@ -36,3 +36,10 @@ Unlike the natural sciences, where causal laws often aim for universality, econo
 │   └── data_loader.py                 # Utility to load EconCausal 4-tuples
 ├── CITATION.cff                       # BibTeX information
 └── README.md
+
+@inproceedings{lee2026econcausal,
+  title={EconCausal: A Context-Aware Causal Reasoning Benchmark for LLMs in Social Science},
+  author={Lee, Donggyu and others},
+  booktitle={KDD},
+  year={2026}
+}
