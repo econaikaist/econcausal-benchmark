@@ -77,3 +77,72 @@ Extend Task 2 by providing an **incorrect or misleading example sign**, testing 
 │
 ├── CITATION.cff                       # Citation metadata
 └── README.md
+```
+
+---
+
+## 📁 Dataset Description
+
+The final benchmark dataset (`data/step4_final_benchmark.csv`) contains **10,439 causal 4-tuples** extracted from peer-reviewed empirical research in economics and finance.
+
+Each entry is represented as a structured tuple:
+- **T (Treatment)**: the intervention or policy variable  
+- **O (Outcome)**: the affected economic or social outcome  
+- **D (Direction)**: causal sign (`+`, `-`, `None`, `mixed`) based on the authors’ preferred specification  
+- **C (Context)**: study-specific institutional, temporal, and geographic conditions  
+
+All tuples are grounded in papers published in top-tier journals and supported by explicit econometric identification strategies.  
+Original paper PDFs are not redistributed due to copyright restrictions; instead, sufficient metadata is provided to enable independent verification.
+
+---
+
+## 🔁 Reproducibility
+
+The benchmark results reported in the accompanying KDD paper can be reproduced using the provided evaluation scripts.
+
+### Installation
+```bash
+pip install -r requirements.txt
+```
+### Run Evaluation
+```bash
+python scripts/evaluate_baselines.py
+```
+The evaluation pipeline uses fixed dataset splits and controlled randomness to ensure reproducibility of all reported results.
+
+---
+
+## ⚖️ Ethical Considerations
+- All data are derived from publicly available, peer-reviewed academic research.
+- No new human-subject data were collected for this benchmark.
+- No personally identifiable information (PII) is included.
+- Copyrighted texts (e.g., paper PDFs) are not redistributed.
+- Generative AI models were used for extraction, refinement, and quality control, and their usage is fully documented via prompts and criteria provided in this repository.
+
+---
+
+## 📜 License
+- Dataset: Creative Commons Attribution 4.0 (CC BY 4.0)
+- Code: Released for research and academic use
+
+Please refer to the LICENSE file for the full license terms.
+
+---
+
+## 📝 Citation
+If you use EconCausal in your research, please cite the following paper:
+```bash
+@inproceedings{lee2026econcausal,
+  title     = {EconCausal: A Context-Aware Causal Reasoning Benchmark for LLMs in Social Science},
+  author    = {Lee, Donggyu and Yun, Hyeok and Cha, Meeyoung and Park, Sungwon and Park, Sangyoon and Kim, Jihee},
+  booktitle = {Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  year      = {2026}
+}
+```
+Citation metadata is also provided in CITATION.cff.
+
+---
+
+## 📬 Contact
+For questions, issues, or suggestions regarding the dataset or benchmark,
+please open a GitHub issue or contact the authors listed in the paper.
