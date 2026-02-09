@@ -12,7 +12,7 @@ The dataset represents causal knowledge using a structured four-element formulat
 
 All causal claims are grounded in peer-reviewed empirical research and reflect the headline findings reported by the original authors.
 
-⸻
+---
 
 ## 2. Intended Use
 
@@ -26,7 +26,7 @@ This dataset is not intended for:
 - Estimation of causal effect sizes
 - Use in real-world regulatory or legal settings without expert verification
 
-⸻
+---
 
 ## 3. Data Sources
 
@@ -41,7 +41,7 @@ Only studies with explicit econometric identification strategies are included, s
 - Regression Discontinuity Designs
 - Randomized Controlled Trials
 
-⸻
+---
 
 ## 4. Dataset Construction Pipeline
 
@@ -75,7 +75,7 @@ File: data/step4_final_benchmark.csv
 
 This file constitutes the final benchmark dataset.
 
-⸻
+---
 
 ## 5. Annotation Scheme
 
@@ -94,7 +94,7 @@ Each entry in the final benchmark contains:
 
 The direction label reflects the authors’ preferred specification rather than re-estimated effects.
 
-⸻
+---
 
 ## 6. Dataset Statistics
 - Total causal tuples: 10,439
@@ -104,7 +104,7 @@ The direction label reflects the authors’ preferred specification rather than 
 
 Detailed statistics are reported in the accompanying paper.
 
-⸻
+---
 
 ## 7. Supported Benchmark Tasks
 
@@ -115,7 +115,7 @@ The dataset supports three benchmark tasks:
 
 Each task is designed to evaluate reasoning beyond surface-level pattern matching.
 
-⸻
+---
 
 ## 8. Known Limitations
 - Numerical effect sizes are not provided
@@ -125,21 +125,21 @@ Each task is designed to evaluate reasoning beyond surface-level pattern matchin
 
 Users should interpret benchmark results with these limitations in mind.
 
-⸻
+---
 
 ## 9. Legal and Usage Notes
 - All data are derived from publicly available academic research
 - Original paper PDFs are not redistributed due to copyright restrictions
 - The dataset is intended strictly for research and benchmarking purposes
 
-⸻
+---
 
 ## 10. Citation
 
 If you use this dataset, please cite the accompanying EconCausal paper.
 Citation metadata is provided in the CITATION.cff file.
 
-⸻
+---
 
 ## 11. Contact
 
