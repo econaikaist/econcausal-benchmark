@@ -1,0 +1,143 @@
+# Step 1: Extract Causal Relations
+
+# Role
+
+You are an expert Research Assistant in Economics and Finance, specialized in causal inference and systematic literature reviews.
+
+
+
+# Goal
+
+From the provided economics paper text, extract all causal effect claims explicitly asserted by the authors, and return them as a JSON array of objects.
+
+
+
+# Definitions & Scope
+
+- **Causal Claim**: A statement in which the authors argue that a change in X (Treatment) causes a change in Y (Outcome).
+
+- **Strict Exclusion**: Exclude simple correlations, descriptive statistics, predictive relationships, or purely theoretical conjectures.
+
+- **Identification Focus**: Prioritize claims supported by empirical identification strategies (e.g., Difference-in-Differences, Instrumental Variables, Regression Discontinuity, Fixed Effects, or Randomized Controlled Trials).
+
+- **No Context at This Stage**: Extract only the treatment and outcome variables as abstract concepts. Do **not** include who/when/where, population, or institutional context; these will be extracted in a later step.
+
+- **Expand Shorthand References**: If treatments or outcomes are referred to using pronouns, acronyms, abbreviations, or shorthand/composite labels (e.g., "it", "the program", "JP", "joint program") after being defined earlier in the paper, always recover and spell out the fully specified variable as originally defined.
+
+
+
+# Extraction Rules
+
+1. **treatment**: A concise noun phrase representing the independent variable or intervention (e.g., "Minimum wage increase").
+
+2. **outcome**: A concise noun phrase representing the dependent variable or affected endpoint (e.g., "Teenage employment rate").
+
+3. **sign**: Categorize the direction of the causal effect as follows:
+
+   - '+': The authors' preferred / main estimate shows that the Treatment increases the Outcome and is statistically significant.
+
+   - '-': The authors' preferred / main estimate shows that the Treatment decreases the Outcome and is statistically significant.
+
+   - 'None': Under the authors' preferred / main specification, no statistically significant effect is found.
+
+   - 'mixed': The effect is heterogeneous, or the direction truly varies across subgroups, or the authors present multiple equally central results with opposite signs.
+
+
+
+   **Priority / tie-break rule**:
+
+   - Identify the authors' preferred / baseline / main result (explicitly labeled as such, or summarized as the headline finding in the Abstract or Conclusion).
+
+   - Assign the sign based **only** on this main result: use '+' or '-' only if it is statistically significant; otherwise use 'None'.
+
+   - Use 'mixed' only when the paper's own core interpretation is that the effect differs in direction across subgroups (e.g., positive for one group and negative for another), or when equally emphasized headline results have conflicting signs.
+
+   - If the direction is stable but statistical significance varies across robustness checks or specifications, do **not** label as 'mixed'; follow the preferred / main specification's direction and significance.
+
+
+
+4. **supporting_evidence**: Extract up to **three** paragraphs verbatim that report the main results, coefficient estimates, or causal conclusions for this specific treatment–outcome pair.
+
+
+
+# Constraints
+
+- **Verbatim Only**: Supporting paragraphs must be copied exactly from the source text, without paraphrasing.
+
+- **Short Phrases**: Keep the treatment and outcome fields under 10 words each.
+
+- **No Hallucination**: If no explicit causal claims are identified, return an empty array [].
+
+- **Output Format**: Return **only** a valid JSON array. Do not include markdown code blocks (unless explicitly requested), preambles, or conversational commentary.
+
+
+
+# JSON Schema Example
+
+
+
+[
+
+  {
+
+    "treatment": "Minimum wage increase",
+
+    "outcome": "Full-time equivalent employment",
+
+    "sign": "+",
+
+    "supporting_evidence": [
+
+"On April 1, 1992, New Jersey's minimum wage rose from $4.25 to $5.05 per hour. To evaluate the impact of the law we surveyed 410 fast-food restaurants in New Jersey and eastern Pennsylvania before and after the rise. Comparisons of employment growth at stores in New Jersey and Pennsylvania (where the minimum wage was constant) provide simple estimates of the effect of the higher minimum wage. We also compare employment changes at stores in New Jersey that were initially paying high wages (above $5) to the changes at lower-wage stores. We find no indication that the rise in the minimum wage reduced employment.",
+
+"As noted in Table 2, New Jersey stores were initially smaller than their Pennsylvania counterparts but grew relative to Pennsylvania stores after the rise in the minimum wage. The relative gain (the "difference in differences" of the changes in employment) is 2.76 FTE employees (or 13 percent), with a t statistic of 2.03. Inspection of the averages in rows 4 and 5 shows that the relative change between New Jersey and Pennsylvania stores is virtually identical when the analysis is restricted to the unbalanced subsample, and it is only slightly smaller when wave-2 employment at the temporarily closed stores is treated as zero."
+
+    ]
+
+  },
+
+  {
+
+    "treatment": "Minimum wage increase",
+
+    "outcome": "Meal prices",
+
+    "sign": "+",
+
+    "supporting_evidence": [
+
+      "The estimated New Jersey dummy in column (i) shows that after-tax meal prices rose 3.2-percent faster in New Jersey than in Pennsylvania between February and November 1992.",
+
+      "Finally, we find that prices of fast-food meals increased in New Jersey relative to Pennsylvania, suggesting that much of the burden of the minimum-wage rise was passed on to consumers."
+
+    ]
+
+  },
+
+  {
+
+    "treatment": "Minimum wage increase",
+
+    "outcome": "Fringe benefits",
+
+    "sign": "None",
+
+    "supporting_evidence": [
+
+      "The results provide no evidence that employers offset the minimum-wage increase by reducing free or reduced-price meals.",
+
+      "However, the relative shift is not statistically significant.",
+
+      "In summary, we can find no indication that New Jersey employers changed either their fringe benefits or their wage profiles to offset the rise in the minimum wage."
+
+    ]
+
+  }
+
+]
+
+
+
+# Text to Process
+
+Please analyze the provided PDF document.

@@ -1,0 +1,28 @@
+# Task 1: Causal Sign Identification
+
+# Role
+You are an expert economist evaluating causal claims from empirical research.
+
+# Task
+Given a specific context and a causal claim, determine whether the claim is valid.
+
+# Context
+{context}
+
+# Causal Claim
+Treatment: {treatment}
+Sign: {sign} (where + means "increases", - means "decreases", None means "no significant effect")
+Outcome: {outcome}
+
+In other words: Under the given context, does {treatment} {sign_description} {outcome}?
+
+# Instructions
+1. Consider the economic mechanisms that would connect treatment to outcome
+2. Evaluate whether the stated sign is plausible given the context
+3. Consider potential confounders or alternative explanations
+4. Provide your judgment as Yes (claim is valid) or No (claim is invalid)
+
+# Output Format
+Respond with a JSON object containing:
+- answer: "Yes" or "No"
+- reasoning: Your step-by-step economic reasoning (max 200 words)

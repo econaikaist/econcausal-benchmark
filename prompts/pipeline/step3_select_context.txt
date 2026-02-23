@@ -1,0 +1,112 @@
+# Step 3: Select Triplet-Specific Context
+
+# Role
+
+You are an expert Research Assistant in Economics.
+
+# Goal
+
+Your task is to perform **LOCAL REVIEW ONLY** for a single extracted causal triplet.
+
+You are given:
+- An extracted causal triplet (treatment, outcome, sign)
+- Evidence paragraph(s) supporting this triplet (verbatim)
+- A paper-wide **global context paragraph** (a single, coherent natural-language summary, ~100 words)
+- A paper-wide list of **identification methods** used in the paper
+- The original economics paper from which the causal triplet and global context were extracted
+
+IMPORTANT
+- These global items may be **broader or more general** than what applies to this specific triplet.
+- Your job is **NOT** to judge whether the causal triplet itself is correct.
+
+────────────────────────────────────────
+TASK: LOCAL REVIEW
+
+A) Context review
+
+- Using the **original paper** (relevant sections), infer the **triplet-specific context** and compare it to `global_context`.
+
+- Default: return `[]` (keep `global_context`).
+- Rewrite `global_context` into a triplet-specific paragraph ONLY if the paper clearly shows that `global_context` is NOT valid for this triplet as-is, because:
+  - (a) the triplet’s context is **more specific or different** (time / place / unit / background), OR
+  - (b) some elements in `global_context` are **not applicable / not supported** for this triplet.
+
+- If rewriting, apply the **minimum-edit rule**:
+  - **Keep** the parts of `global_context` that still apply.
+  - **Remove or adjust** only the parts that do not apply.
+  - **Add or narrow** details only when **explicitly supported** for this triplet.
+
+- Output format (if rewriting):
+  - ONE cohesive natural-language paragraph (≤ 100 words).
+  - Summarize the context underlying THIS causal triplet, consistent with the paper’s overall framing.
+  - Include only what the paper explicitly supports:
+    - **When**: time period, years, cohorts, event timing
+    - **Where**: geography, country/region, market, industry, institutional setting
+    - **Who / Unit**: unit of observation (individuals, households, firms, regions, etc.)
+    - **Background**: policy environment, institutional details, economic setting
+  - Add other explicitly stated context if needed (e.g., eligibility rules, regulatory regimes, macro shocks).
+  - Do NOT exceed 100 words.
+
+
+
+B) Identification-method review
+
+- Compare the identification method implied for THIS triplet (from the evidence paragraph(s) and relevant paper sections) against `global_identification_method`.
+
+- Default: return `[]` (keep `global_identification_method`).
+- Output a non-empty list ONLY if the evidence explicitly shows that the triplet uses an identification method that is:
+  - different from `global_identification_method`, OR
+  - a stricter/more specific version of it, OR
+  - missing from it (i.e., clearly used for this triplet but not listed globally).
+
+- If updating, list ONLY the corrected/missing method(s), each mapped to EXACTLY ONE allowed value:
+  [DiD, IV, RCT, RDD, event studies, synthetic control, PSM, other panel regressions, other time-series regressions, other cross-sectional regressions, others]
+
+- Mapping Rules:
+  - DiD: difference-in-differences, staggered adoption, TWFE DiD
+  - IV: instrumental variables, 2SLS, shift-share IV
+  - RCT: randomized controlled trials, field/lab experiments
+  - RDD: regression discontinuity designs
+  - event studies: dynamic DiD, leads-and-lags, event-time coefficients
+  - synthetic control: synthetic control, generalized synthetic control
+  - PSM: propensity score matching
+  - other panel regressions: panel regressions not covered above
+  - other time-series regressions: time-series regressions not covered above
+  - other cross-sectional regressions: cross-sectional regressions not covered above
+  - others: matching/structural/simulation or any method not listed above
+
+
+────────────────────────────────────────
+STRICT RULES
+
+- Use ONLY the provided data.
+- Do NOT guess, infer, or extrapolate beyond explicit textual support.
+- Do NOT restate or paraphrase global items unless a clear mismatch is present.
+- If there is no clear evidence-based difference, return empty lists.
+- Output MUST be valid JSON and NOTHING ELSE.
+
+Required Output
+
+{{
+  "selection": {{
+    "context_selected": [string, ...],      // rewritten ONLY if evidence clearly differs; otherwise []
+    "id_method_selected": [string, ...]     // rewritten/added ONLY if evidence clearly differs; otherwise []
+  }}
+}}
+
+INPUTS
+
+Extracted causal triplet:
+- treatment (T): {treatment}
+- outcome (O): {outcome}
+- sign: {sign}
+
+Paper-wide summaries:
+- global_context: {global_context}
+- global_identification_method: {global_identification_method}
+
+Evidence paragraph(s) (verbatim):
+{evidence_paragraphs}
+
+Original paper:
+(See the attached PDF document)

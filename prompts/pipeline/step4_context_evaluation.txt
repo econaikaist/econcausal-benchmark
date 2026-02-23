@@ -1,0 +1,136 @@
+# Step 4: Critic Evaluation (with Context Scoring)
+
+# Role
+
+You are a **causal-inference critic** reviewing an extracted causal relation from an Economics/Finance paper.
+
+# Goal 
+
+Given an extracted **causal triplet** and supporting materials, evaluate whether the triplet is correctly extracted and score it on **six criteria (0–3 each)** using **only** the provided inputs.
+
+# Inputs You Will Receive
+
+1) Extracted triplet:
+- treatment (T)
+- outcome (O)
+- sign  // one of ["+", "-", "None", "mixed"]
+
+2) Evidence paragraph(s) for this triplet (verbatim)
+
+3) Selected context for this triplet (as provided by the extraction pipeline)
+
+4) Original paper (full text)
+
+
+# Extraction Rules (how the triplet was originally extracted)
+
+## Triplet Extraction Rules
+
+1. **treatment**: A concise noun phrase representing the independent variable or intervention (e.g., "Minimum wage increase").
+
+2. **outcome**: A concise noun phrase representing the dependent variable or affected endpoint (e.g., "Teenage employment rate").
+
+3. **sign**: Categorize the direction of the causal effect as follows:
+
+   - '+': The authors' preferred (baseline/main) estimate shows that the Treatment increases the Outcome and is statistically significant.
+
+   - '-': The authors' preferred (baseline/main) estimate shows that the Treatment decreases the Outcome and is statistically significant.
+
+   - 'None': Under the authors' preferred (baseline/main) specification, no statistically significant effect is found.
+
+   - 'mixed': The effect is heterogeneous, or the direction truly varies across subgroups, or the authors present multiple equally central results with opposite signs.
+
+
+## Context Extraction Rules
+
+The selected context paragraph should integrate, **when available**, the following paper-wide elements:
+
+- **When**: time period, years, cohorts, event timing, or historical window studied  
+- **Where**: geography, country/region, market, industry, platform, or institutional setting  
+- **Who / Unit**: unit of observation (e.g., individuals, households, firms, regions, products, transactions)  
+- **Background**: key policy environment, institutional details, economic setting, or core assumptions  
+
+Additionally, include any other important contextual elements if present (e.g., eligibility rules, regulatory regimes, macro shocks, industry structure), while keeping the paragraph **under 100 words** and **avoiding redundancy or causal interpretation**.
+
+
+# Scoring (0–3)
+
+Use this rubric for every dimension:
+
+- **3** = clearly supported / correct  
+- **2** = mostly supported / minor ambiguity  
+- **1** = weak support / substantial ambiguity / could be mis-specified  
+- **0** = not supported / contradicted / clearly wrong  
+
+For EACH scored dimension (1–6), you MUST provide a one-sentence justification explaining why that score was assigned.
+
+
+# Dimensions to Score
+
+1) **variable_extraction**
+- Are **treatment** and **outcome** extracted as **concise, concrete noun phrases** that are explicitly mentioned or defined in the paper?
+- If the paper uses pronouns, acronyms, abbreviations, or shorthand references (e.g., “it,” “the program,” “JP”), are these **correctly expanded to the fully specified variables** as originally defined in the paper?
+
+2) **direction**
+- Does the triplet correctly capture the **intended causal direction** (Treatment → Outcome) asserted by the authors without reversal due to ambiguous or easily flipped wording?
+
+3) **sign**
+- Does the **sign** (+/−/None/mixed) match the authors’ **preferred/baseline/main estimate** described in the evidence (not a robustness check or secondary specification)?
+- Does it follow the rule: use **+/- only if statistically significant**, **None** if not significant under the preferred specification, and **mixed** only for truly heterogeneous or opposite-direction **headline results**?
+
+4) **causality**
+- Is the extracted relationship presented as a **causal effect claim** supported by an identification strategy?
+- Does it **exclude** simple correlations/associations, descriptive statistics, predictive relationships, or purely theoretical conjectures?
+
+5) **main_claim**
+- Is the triplet a **core causal claim** of the paper emphasized by the authors (e.g., a headline or central contribution in the abstract, introduction, or conclusion), rather than a secondary, peripheral, or incidental finding?
+
+6) **context_appropriateness**
+- Does the context include the key elements required to interpret the causal claim, without omitting paper-critical setting information?
+- Does the context avoid encoding or implying the correctness of the triplet, including its sign, direction, or causal validity?
+
+
+
+# Required Output
+
+Return **one valid JSON object only** following this schema:
+
+{{
+  "triplet": {{
+    "treatment": "string",
+    "outcome": "string",
+    "sign": "+" | "-" | "None" | "mixed"
+  }},
+  "scores": {{
+    "variable_extraction": 0 | 1 | 2 | 3,
+    "direction": 0 | 1 | 2 | 3,
+    "sign": 0 | 1 | 2 | 3,
+    "causality": 0 | 1 | 2 | 3,
+    "main_claim": 0 | 1 | 2 | 3,
+    "context_appropriateness": 0 | 1 | 2 | 3
+  }},
+  "reasons": {{
+    "variable_extraction": "string (one-sentence justification)",
+    "direction": "string (one-sentence justification)",
+    "sign": "string (one-sentence justification)",
+    "causality": "string (one-sentence justification)",
+    "main_claim": "string (one-sentence justification)",
+    "context_appropriateness": "string (one-sentence justification)"
+  }}
+}}
+
+# INPUTS
+
+Extracted triplet:
+- treatment (T): {treatment}
+- outcome (O): {outcome}
+- sign: {sign}
+
+Evidence paragraph(s) (verbatim):
+{evidence_paragraphs}
+
+Selected context for this triplet:
+{context_selected}
+
+Original paper:
+(See the attached PDF document)
