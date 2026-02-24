@@ -46,8 +46,8 @@ Examples:
   # Run with limited samples for testing
   python run_evaluation.py --max-samples 10
 
-  # Run task4 with 3 examples instead of 1
-  python run_evaluation.py --tasks task4 --task4-examples 3
+  # Run task3 with 3 examples instead of 1
+  python run_evaluation.py --tasks task3 --task3-examples 3
 
   # Only compute metrics (no new evaluation)
   python run_evaluation.py --metrics-only
@@ -119,26 +119,26 @@ Note: Auto-resume is enabled by default. Completed results are preserved,
 
     # Task-specific configuration
     parser.add_argument(
+        "--task2-examples",
+        type=int,
+        default=1,
+        help="Number of examples for task 2 (default: 1)"
+    )
+    parser.add_argument(
         "--task3-examples",
         type=int,
         default=1,
         help="Number of examples for task 3 (default: 1)"
     )
     parser.add_argument(
-        "--task4-examples",
-        type=int,
-        default=1,
-        help="Number of examples for task 4 (default: 1)"
+        "--task1-no-context",
+        action="store_true",
+        help="Exclude context from task1 prompts (for ablation study)"
     )
     parser.add_argument(
-        "--task2-no-context",
+        "--task1-unknown-option",
         action="store_true",
-        help="Exclude context from task2 prompts (for ablation study)"
-    )
-    parser.add_argument(
-        "--task2-unknown-option",
-        action="store_true",
-        help="Add 'unknown' to task2 answer choices (for ablation study)"
+        help="Add 'unknown' to task1 answer choices (for ablation study)"
     )
 
     # Processing configuration
@@ -204,10 +204,10 @@ Note: Auto-resume is enabled by default. Completed results are preserved,
     logger.info(f"Journal type: {args.journal_type}")
     logger.info(f"Gemini API: {'FINANCE key' if args.journal_type == 'finance' else 'ECON key'}")
     logger.info(f"Data path: {data_path}")
+    logger.info(f"Task2 examples: {args.task2_examples}")
     logger.info(f"Task3 examples: {args.task3_examples}")
-    logger.info(f"Task4 examples: {args.task4_examples}")
-    logger.info(f"Task2 no context: {args.task2_no_context}")
-    logger.info(f"Task2 unknown option: {args.task2_unknown_option}")
+    logger.info(f"Task1 no context: {args.task1_no_context}")
+    logger.info(f"Task1 unknown option: {args.task1_unknown_option}")
     logger.info(f"Output directory: {args.output_dir}")
 
     # Metrics-only mode
@@ -226,10 +226,10 @@ Note: Auto-resume is enabled by default. Completed results are preserved,
         journal_type=args.journal_type,
         max_samples_per_task=args.max_samples,
         random_seed=args.seed,
+        task2_num_examples=args.task2_examples,
         task3_num_examples=args.task3_examples,
-        task4_num_examples=args.task4_examples,
-        task2_no_context=args.task2_no_context,
-        task2_unknown_option=args.task2_unknown_option,
+        task1_no_context=args.task1_no_context,
+        task1_unknown_option=args.task1_unknown_option,
         max_workers=args.max_workers,
         checkpoint_interval=args.checkpoint_interval,
     )

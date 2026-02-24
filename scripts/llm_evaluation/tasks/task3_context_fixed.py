@@ -1,4 +1,4 @@
-"""Task 4: Noise Robustness (similar T/O, different contexts, reverted signs)."""
+"""Task 3: Misinformation-Robust Sign Prediction (similar T/O, different contexts, reverted signs)."""
 
 from typing import Any
 from pathlib import Path
@@ -6,25 +6,25 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from common.schemas import EVAL_TASK4_SCHEMA
-from common.prompts import EVAL_TASK4_PROMPT
+from common.schemas import EVAL_TASK3_SCHEMA
+from common.prompts import EVAL_TASK3_PROMPT
 from .base import BaseTask
-from ..data_generator import Task4Case
+from ..data_generator import Task3Case
 
 
-class Task4ContextFixed(BaseTask):
-    """Task 4: Noise Robustness - Predict sign despite misleading examples with reverted signs."""
+class Task3ContextFixed(BaseTask):
+    """Task 3: Misinformation-Robust - Predict sign despite misleading examples with reverted signs."""
 
-    task_name = "task4"
-    task_description = "Noise Robustness: Predict sign for new context given examples with reverted signs"
+    task_name = "task3"
+    task_description = "Misinformation-Robust: Predict sign for new context given examples with reverted signs"
 
     VALID_SIGNS = {"+", "-", "None", "mixed"}
 
     def __init__(self):
-        """Initialize Task 4."""
+        """Initialize Task 3."""
         super().__init__(
-            schema=EVAL_TASK4_SCHEMA,
-            prompt_template=EVAL_TASK4_PROMPT,
+            schema=EVAL_TASK3_SCHEMA,
+            prompt_template=EVAL_TASK3_PROMPT,
         )
 
     def _format_examples(self, examples: list[dict]) -> str:
@@ -43,12 +43,12 @@ class Task4ContextFixed(BaseTask):
             formatted.append("")
         return "\n".join(formatted)
 
-    def format_prompt(self, test_case: Task4Case) -> str:
+    def format_prompt(self, test_case: Task3Case) -> str:
         """
-        Format prompt for Task 4.
+        Format prompt for Task 3.
 
         Args:
-            test_case: Task4Case instance
+            test_case: Task3Case instance
 
         Returns:
             Formatted prompt string
@@ -89,12 +89,12 @@ class Task4ContextFixed(BaseTask):
         normalized = sign_mapping.get(sign.lower(), sign)
         return normalized if normalized in self.VALID_SIGNS else sign
 
-    def get_expected(self, test_case: Task4Case) -> str:
+    def get_expected(self, test_case: Task3Case) -> str:
         """
         Get expected sign.
 
         Args:
-            test_case: Task4Case instance
+            test_case: Task3Case instance
 
         Returns:
             Expected sign

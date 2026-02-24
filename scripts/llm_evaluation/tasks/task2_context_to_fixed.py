@@ -1,4 +1,4 @@
-"""Task 3: Context-Aware Reasoning (Treatment/Outcome Fixed)."""
+"""Task 2: Context-Dependent Sign Prediction (Treatment/Outcome Fixed)."""
 
 from typing import Any
 from pathlib import Path
@@ -6,25 +6,25 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from common.schemas import EVAL_TASK3_SCHEMA
-from common.prompts import EVAL_TASK3_PROMPT
+from common.schemas import EVAL_TASK2_SCHEMA
+from common.prompts import EVAL_TASK2_PROMPT
 from .base import BaseTask
-from ..data_generator import Task3Case
+from ..data_generator import Task2Case
 
 
-class Task3ContextTOFixed(BaseTask):
-    """Task 3: Context-Aware Reasoning - Predict sign with fixed T/O and varying contexts."""
+class Task2ContextTOFixed(BaseTask):
+    """Task 2: Context-Dependent Sign Prediction - Predict sign for new context given examples."""
 
-    task_name = "task3"
-    task_description = "Context-Aware (T/O Fixed): Predict sign for new context given examples"
+    task_name = "task2"
+    task_description = "Context-Dependent (T/O Fixed): Predict sign for new context given examples"
 
     VALID_SIGNS = {"+", "-", "None", "mixed"}
 
     def __init__(self):
-        """Initialize Task 3."""
+        """Initialize Task 2."""
         super().__init__(
-            schema=EVAL_TASK3_SCHEMA,
-            prompt_template=EVAL_TASK3_PROMPT,
+            schema=EVAL_TASK2_SCHEMA,
+            prompt_template=EVAL_TASK2_PROMPT,
         )
 
     def _format_examples(self, examples: list[dict]) -> str:
@@ -43,12 +43,12 @@ class Task3ContextTOFixed(BaseTask):
             formatted.append("")
         return "\n".join(formatted)
 
-    def format_prompt(self, test_case: Task3Case) -> str:
+    def format_prompt(self, test_case: Task2Case) -> str:
         """
-        Format prompt for Task 3.
+        Format prompt for Task 2.
 
         Args:
-            test_case: Task3Case instance
+            test_case: Task2Case instance
 
         Returns:
             Formatted prompt string
@@ -89,12 +89,12 @@ class Task3ContextTOFixed(BaseTask):
         normalized = sign_mapping.get(sign.lower(), sign)
         return normalized if normalized in self.VALID_SIGNS else sign
 
-    def get_expected(self, test_case: Task3Case) -> str:
+    def get_expected(self, test_case: Task2Case) -> str:
         """
         Get expected sign.
 
         Args:
-            test_case: Task3Case instance
+            test_case: Task2Case instance
 
         Returns:
             Expected sign

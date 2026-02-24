@@ -56,7 +56,7 @@ SUPPORTED_MODELS = {
 }
 
 # Task types
-TASK_TYPES = ["task1", "task2", "task3", "task4"]
+TASK_TYPES = ["task1", "task2", "task3"]
 
 # Models with rate limit restrictions (max_workers capped at 20)
 RATE_LIMITED_MODELS = [
@@ -87,10 +87,10 @@ class EvaluationConfig:
     random_seed: int = 42
 
     # Task-specific configuration
-    task3_num_examples: int = 1  # Number of examples for task 3 (default: 1)
-    task4_num_examples: int = 1  # Number of examples for task 4 (1 or 3, default: 1)
-    task2_no_context: bool = False  # If True, exclude context from task2 prompts
-    task2_unknown_option: bool = False  # If True, add 'unknown' to task2 answer choices
+    task2_num_examples: int = 1  # Number of examples for task 2 (default: 1)
+    task3_num_examples: int = 1  # Number of examples for task 3 (1 or 3, default: 1)
+    task1_no_context: bool = False  # If True, exclude context from task1 prompts
+    task1_unknown_option: bool = False  # If True, add 'unknown' to task1 answer choices
 
     # Processing configuration
     max_workers: int = 128
@@ -111,10 +111,10 @@ class EvaluationConfig:
                 raise ValueError(f"Unknown model: {model}. Must be one of {list(SUPPORTED_MODELS.keys())}")
 
         # Validate num_examples
+        if self.task2_num_examples < 1:
+            raise ValueError(f"task2_num_examples must be >= 1, got {self.task2_num_examples}")
         if self.task3_num_examples < 1:
             raise ValueError(f"task3_num_examples must be >= 1, got {self.task3_num_examples}")
-        if self.task4_num_examples < 1:
-            raise ValueError(f"task4_num_examples must be >= 1, got {self.task4_num_examples}")
 
         # Create output directory
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)

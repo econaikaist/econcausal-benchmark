@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/arXiv-Paper-B31B1B.svg" alt="arXiv"></a>
+  <a href="https://arxiv.org/abs/2510.07231"><img src="https://img.shields.io/badge/arXiv-Paper-B31B1B.svg" alt="arXiv"></a>
   <a href="https://github.com/econaikaist/econcausal-benchmark"><img src="https://img.shields.io/badge/GitHub-Repository-181717.svg" alt="GitHub"></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg" alt="License"></a>
 </p>
@@ -71,7 +71,7 @@ Each causal triplet includes:
 
 EconCausal includes three progressively challenging evaluation tasks probing context-dependent causal reasoning.
 
-### Task 1: Causal Sign Identification (947 econ + 860 finance)
+### Task 1: Causal Sign Prediction (947 econ + 860 finance)
 
 Given a context and a treatment-outcome pair, predict the causal sign. Tests whether LLMs can internalize economic causalities from peer-reviewed research.
 
@@ -98,10 +98,8 @@ econcausal-benchmark/
 │   │   └── task3.*             # Task 3
 │   └── metadata/               # NBER paper metadata
 ├── prompts/
-│   ├── pipeline/               # Extraction pipeline prompts (Steps 1-4)
 │   └── evaluation/             # Benchmark task prompts (Tasks 1-3)
 ├── scripts/
-│   ├── causal_triplet_extraction_pipeline/
 │   ├── llm_evaluation/
 │   └── common/
 ├── figures/
@@ -117,20 +115,6 @@ econcausal-benchmark/
 
 ```bash
 pip install openai pandas openpyxl tqdm numpy
-```
-
-### Running the Extraction Pipeline
-
-```bash
-cd scripts/causal_triplet_extraction_pipeline
-
-python run_pipeline.py \
-    --input-dir /path/to/pdfs \
-    --output-dir /path/to/output \
-    --model gpt-4o \
-    --consensus-mode \
-    --consensus-runs 3 \
-    --consensus-threshold 2
 ```
 
 ### Running LLM Evaluation

@@ -154,7 +154,7 @@ class MetricsComputer:
         """
         Compute metrics for all tasks and models.
 
-        For task3 and task4, also computes separate metrics for sign_differs cases.
+        For task2 and task3, also computes separate metrics for sign_differs cases.
 
         Returns:
             Dictionary with metrics for all task/model combinations
@@ -175,8 +175,8 @@ class MetricsComputer:
                     metrics = self.compute_task_metrics(task_name, model_name, results)
                     task_metrics[model_name] = asdict(metrics)
 
-                    # For task3/task4: compute sign_differs filtered metrics
-                    if task_name in ("task3", "task4"):
+                    # For task2/task3: compute sign_differs filtered metrics
+                    if task_name in ("task2", "task3"):
                         sign_differs_results = [
                             r for r in results
                             if r.get("input_data", {}).get("sign_differs", False)
@@ -235,9 +235,9 @@ class MetricsComputer:
         }
         overall_ranking = sorted(overall_avg.keys(), key=lambda x: overall_avg[x], reverse=True)
 
-        # Collect sign_differs accuracy for task3/task4
+        # Collect sign_differs accuracy for task2/task3
         sign_differs_accuracy = {}
-        for task_name in ("task3", "task4"):
+        for task_name in ("task2", "task3"):
             if task_name not in all_metrics:
                 continue
             task_sd = {}

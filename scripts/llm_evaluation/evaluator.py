@@ -30,20 +30,18 @@ from .config import EvaluationConfig, SUPPORTED_MODELS, RATE_LIMITED_MODELS, RAT
 from .data_generator import TestCaseGenerator
 from .tasks import (
     BaseTask,
-    Task1Verification,
-    Task2SignPrediction,
-    Task3ContextTOFixed,
-    Task4ContextFixed,
+    Task1SignPrediction,
+    Task2ContextTOFixed,
+    Task3ContextFixed,
 )
 from .tasks.base import TaskResult
 
 
 # Task registry
 TASK_REGISTRY = {
-    "task1": Task1Verification,
-    "task2": Task2SignPrediction,
-    "task3": Task3ContextTOFixed,
-    "task4": Task4ContextFixed,
+    "task1": Task1SignPrediction,
+    "task2": Task2ContextTOFixed,
+    "task3": Task3ContextFixed,
 }
 
 
@@ -66,10 +64,10 @@ class EvaluationOrchestrator:
         # Initialize tasks
         self.tasks = {}
         for name, cls in TASK_REGISTRY.items():
-            if name == "task2":
+            if name == "task1":
                 self.tasks[name] = cls(
-                    no_context=config.task2_no_context,
-                    unknown_option=config.task2_unknown_option,
+                    no_context=config.task1_no_context,
+                    unknown_option=config.task1_unknown_option,
                 )
             else:
                 self.tasks[name] = cls()
@@ -385,16 +383,14 @@ class EvaluationOrchestrator:
         if task_type == "task1":
             test_cases = self.data_generator.generate_task1_cases(self.config.max_samples_per_task)
         elif task_type == "task2":
-            test_cases = self.data_generator.generate_task2_cases(self.config.max_samples_per_task)
+            test_cases = self.data_generator.generate_task2_cases(
+                self.config.max_samples_per_task,
+                num_examples=self.config.task2_num_examples,
+            )
         elif task_type == "task3":
             test_cases = self.data_generator.generate_task3_cases(
                 self.config.max_samples_per_task,
                 num_examples=self.config.task3_num_examples,
-            )
-        elif task_type == "task4":
-            test_cases = self.data_generator.generate_task4_cases(
-                self.config.max_samples_per_task,
-                num_examples=self.config.task4_num_examples,
             )
         else:
             self.logger.error(f"Unknown task type: {task_type}")

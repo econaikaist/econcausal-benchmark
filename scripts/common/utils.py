@@ -909,7 +909,7 @@ class OpenAIClient:
 # Different Gemini keys for econ vs finance to avoid rate limits
 GEMINI_API_KEY_ECON = ""
 GEMINI_API_KEY_FINANCE = ""
-GEMINI_API_KEY_PLUS =""
+GEMINI_API_KEY_PLUS = ""
 # GEMINI_API_KEY = GEMINI_API_KEY_ECON  # Default
 GEMINI_API_KEY = GEMINI_API_KEY_PLUS  # Default
 GROK_API_KEY = ""
