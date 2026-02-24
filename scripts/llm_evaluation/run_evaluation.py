@@ -99,7 +99,7 @@ Note: Auto-resume is enabled by default. Completed results are preserved,
     parser.add_argument(
         "--output-dir",
         type=str,
-        default="/home/donggyu/econ_causality/econ_eval/evaluation_results",
+        default="",
         help="Output directory for results"
     )
 
@@ -181,7 +181,7 @@ Note: Auto-resume is enabled by default. Completed results are preserved,
     models = list(SUPPORTED_MODELS.keys()) if "all" in args.models else args.models
 
     # Determine data path
-    base_dir = Path("/home/donggyu/econ_causality/new_data/real_data_1991")
+    base_dir = Path("")
 
     if args.data_path:
         # Direct path override

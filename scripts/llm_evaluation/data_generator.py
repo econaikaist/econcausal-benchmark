@@ -150,7 +150,7 @@ class TestCaseGenerator:
 
         return cases
 
-    TASK_INPUT_DIR = Path("/home/donggyu/econ_causality/new_data/real_data_1991")
+    TASK_INPUT_DIR = Path("")
 
     def _load_task_input(self, task_name: str) -> Optional[dict]:
         """Load pre-computed task input JSON (task2_input.json or task3_input.json).

@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 # Default paths
-DEFAULT_DATA_PATH = "/home/donggyu/econ_causality/new_data/real_data_1991/evaluation_data.json"
-DEFAULT_OUTPUT_DIR = "/home/donggyu/econ_causality/econ_eval/evaluation_results"
+DEFAULT_DATA_PATH = ""
+DEFAULT_OUTPUT_DIR = ""
 
 # Supported models and their configurations
 SUPPORTED_MODELS = {
