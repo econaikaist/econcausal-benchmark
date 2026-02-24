@@ -52,27 +52,6 @@ Socio-economic causal effects depend heavily on their specific institutional and
 | Finance journals | 3 (JFE, JF, RFS) |
 | Domain split | Economics 67.7% / Finance 32.3% |
 
-### Ground-Truth Sign Distribution
-
-| Sign | Count | Percentage | Description |
-|---|---|---|---|
-| + | 5,841 | 55.7% | Treatment significantly increases outcome |
-| - | 3,402 | 32.4% | Treatment significantly decreases outcome |
-| None | 1,056 | 10.1% | No statistically significant effect |
-| Mixed | 191 | 1.8% | Heterogeneous effects across subgroups |
-
-<p align="center">
-  <img src="figures/sign_distribution.png" width="60%" alt="Ground Truth Sign Distribution">
-</p>
-
-### Topical Diversity
-
-The dataset spans the full breadth of economics and finance, covering all JEL classification codes from Financial Economics (G) and Macroeconomics (E) to Labor Economics (J), Public Economics (H), and Development (O).
-
-<p align="center">
-  <img src="figures/jel_distribution.png" width="85%" alt="JEL Code Distribution">
-</p>
-
 ### Data Format
 
 Each causal triplet includes:
@@ -82,57 +61,9 @@ Each causal triplet includes:
 | `treatment` | Independent variable / intervention |
 | `outcome` | Dependent variable / affected endpoint |
 | `sign` | Direction of causal effect (`+`, `-`, `None`, `mixed`) |
-| `final_context` | Institutional and environmental context (max 100 words) |
-| `final_id_methods` | Identification strategies (DiD, IV, RCT, RDD, etc.) |
-| `score_sum` | Aggregate quality score from multi-critic evaluation (0-18) |
-| Paper metadata | Title, authors, year, venue, JEL codes, paper URL |
-
----
-
-## Construction Pipeline
-
-EconCausal is constructed through a **four-stage LLM-based extraction and filtering pipeline** yielding high-precision annotations.
-
-<p align="center">
-  <img src="figures/pipeline.png" width="95%" alt="EconCausal Pipeline">
-</p>
-
-### Step 1: Triplet Extraction with Multi-Run Consensus
-
-- Run the LLM three independent times per paper
-- Retain treatment-outcome pairs appearing in >= 2 of 3 runs
-- Merge pairs with minor wording differences using cosine similarity (threshold: 0.8)
-- Assign signs by majority vote; store up to three supporting evidence paragraphs verbatim
-
-### Step 2: Paper-Level Metadata & Global Context
-
-- Classify papers as empirical vs. theoretical
-- Generate a concise global context paragraph (When/Where/Who/Background, max 100 words)
-- Identify and deduplicate identification methods (DiD, IV, RDD, RCT, etc.)
-
-### Step 3: Triplet-Specific Context Refinement
-
-- Verify whether the global context applies at the individual claim level
-- Apply minimum-edit adjustments only when the paper explicitly shows differences
-- Retain global defaults unchanged when no evidence-based mismatch is found
-
-### Step 4: Multi-Critic Evaluation & Conservative Filtering
-
-- Three independent critic models score each triplet on **6 quality dimensions** (0-3 rubric):
-  1. Variable extraction quality
-  2. Causal direction accuracy
-  3. Sign correctness
-  4. Causality (causal vs. correlational)
-  5. Main-claim centrality
-  6. Context appropriateness
-- Remove triplets if any dimension score < 2 or total score <= 15
-- Filtering removes **27.3%** of candidate triplets
-
-### Expert Validation
-
-- Three economics professors assessed 206 triplets within their expertise
-- Pipeline achieves **73.8% accept/reject agreement** with human experts
-- Per-dimension Mean Absolute Error: **0.229**
+| `context` | Institutional and environmental context (max 100 words) |
+| `identification_methods` | Identification strategies (DiD, IV, RCT, RDD, etc.) |
+| Paper metadata | `paper_id`, `title`, `author`, `publication_year`, `published_venue`, `jel_codes`, `paper_url` |
 
 ---
 
@@ -140,7 +71,7 @@ EconCausal is constructed through a **four-stage LLM-based extraction and filter
 
 EconCausal includes three progressively challenging evaluation tasks probing context-dependent causal reasoning.
 
-### Task 1: Causal Sign Identification (1,887 instances)
+### Task 1: Causal Sign Identification (947 econ + 860 finance)
 
 Given a context and a treatment-outcome pair, predict the causal sign. Tests whether LLMs can internalize economic causalities from peer-reviewed research.
 
@@ -152,10 +83,6 @@ Given a known causal effect under context c1, predict the sign of the same treat
 
 Same as Task 2, but with deliberately incorrect sign information. Tests whether LLMs can discount misinformation and perform robust, context-grounded reasoning.
 
-<p align="center">
-  <img src="figures/accuracy_by_sign.png" width="85%" alt="Accuracy by Sign Category">
-</p>
-
 ---
 
 ## Repository Structure
@@ -163,57 +90,21 @@ Same as Task 2, but with deliberately incorrect sign information. Tests whether 
 ```
 econcausal-benchmark/
 ├── data/
-│   ├── causal_triplets/          # Full dataset of 10,490 causal triplets
-│   │   ├── causal_triplets.csv
-│   │   └── causal_triplets.jsonl
-│   ├── tasks/                    # Benchmark evaluation tasks
-│   │   ├── task1.csv / task1.jsonl   # Causal Sign Identification
-│   │   ├── task2.csv / task2.jsonl   # Context-Dependent Sign Prediction
-│   │   └── task3.csv / task3.jsonl   # Misinformation-Robust Sign Prediction
-│   └── metadata/                 # NBER paper metadata
-│       ├── abs.csv               # Paper abstracts
-│       ├── jel.csv               # JEL classification codes
-│       ├── published.csv         # Publication venues
-│       └── ref.csv               # References
+│   ├── causal_triplets/        # 10,490 causal triplets (csv + jsonl)
+│   ├── tasks/                  # Benchmark tasks (csv + jsonl)
+│   │   ├── task1_econ.*        # Task 1 - Economics
+│   │   ├── task1_finance.*     # Task 1 - Finance
+│   │   ├── task2.*             # Task 2
+│   │   └── task3.*             # Task 3
+│   └── metadata/               # NBER paper metadata
 ├── prompts/
-│   ├── pipeline/                 # Prompts used in the extraction pipeline
-│   │   ├── step1_extract_causal_relations.txt
-│   │   ├── step2_extract_metadata.txt
-│   │   ├── step3_select_context.txt
-│   │   ├── step4_critic_evaluation.txt
-│   │   └── step4_context_evaluation.txt
-│   └── evaluation/               # Prompts used in the benchmark tasks
-│       ├── task1_causal_sign_identification.txt
-│       ├── task2_sign_prediction_*.txt
-│       ├── task3_context_dependent_sign_prediction.txt
-│       └── task4_misinformation_robust_sign_prediction.txt
+│   ├── pipeline/               # Extraction pipeline prompts (Steps 1-4)
+│   └── evaluation/             # Benchmark task prompts (Tasks 1-3)
 ├── scripts/
-│   ├── causal_triplet_extraction_pipeline/   # Extraction pipeline code
-│   │   ├── run_pipeline.py
-│   │   ├── step1_extract_causal_relations.py
-│   │   ├── step2_extract_metadata.py
-│   │   ├── step3_select_context.py
-│   │   ├── step4_critic_evaluation.py
-│   │   └── step5_generate_results.py
-│   ├── llm_evaluation/           # LLM evaluation framework
-│   │   ├── run_evaluation.py
-│   │   ├── evaluator.py
-│   │   ├── config.py
-│   │   ├── data_generator.py
-│   │   ├── metrics.py
-│   │   └── tasks/
-│   └── common/                   # Shared utilities
-│       ├── utils.py
-│       ├── schemas.py
-│       ├── dataclasses.py
-│       └── prompts.py
+│   ├── causal_triplet_extraction_pipeline/
+│   ├── llm_evaluation/
+│   └── common/
 ├── figures/
-│   ├── intro.png
-│   ├── pipeline.png
-│   ├── sign_distribution.png
-│   ├── jel_distribution.png
-│   ├── accuracy_by_sign.png
-│   └── accuracy_trend.png
 ├── LICENSE
 └── README.md
 ```
@@ -233,7 +124,6 @@ pip install openai pandas openpyxl tqdm numpy
 ```bash
 cd scripts/causal_triplet_extraction_pipeline
 
-# Run the full pipeline (Steps 1-5)
 python run_pipeline.py \
     --input-dir /path/to/pdfs \
     --output-dir /path/to/output \
@@ -287,4 +177,4 @@ If you use EconCausal in your research, please cite:
 
 ## Contact
 
-For questions or feedback, please open an issue or contact the authors.
+For questions or feedback, send mail to donggyu.lee@kaist.ac.kr
