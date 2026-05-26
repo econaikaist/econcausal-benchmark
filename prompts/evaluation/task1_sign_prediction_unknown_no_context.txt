@@ -1,4 +1,4 @@
-# Task 2: Sign Prediction with Unknown Option (No Context)
+# Task 1: Sign Prediction with Unknown Option (No Context)
 
 # Role
 You are an expert economist.
