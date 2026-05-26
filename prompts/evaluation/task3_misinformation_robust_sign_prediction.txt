@@ -1,4 +1,4 @@
-# Task 4: Misinformation-Robust Sign Prediction
+# Task 3: Misinformation-Robust Sign Prediction
 
 # Role
 You are an expert economist.
