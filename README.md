@@ -1,20 +1,10 @@
 <h1 align="center">EconCausal: A Context-Aware Economic Reasoning Benchmark for Large Language Models</h1>
 
 <p align="center">
-  <b>Donggyu Lee<sup>1</sup>, Hyeok Yun<sup>2</sup>, Meeyoung Cha<sup>3</sup>, Sungwon Park<sup>4*</sup>, Sangyoon Park<sup>5</sup>, Jihee Kim<sup>2*</sup></b>
+  <b>Anonymous Authors</b>
 </p>
 
 <p align="center">
-  <sup>1</sup>Graduate School of Data Science, KAIST &nbsp;
-  <sup>2</sup>College of Business, KAIST &nbsp;
-  <sup>3</sup>MPI-SP, Germany<br>
-  <sup>4</sup>School of Computing, KAIST &nbsp;
-  <sup>5</sup>Division of Social Science, HKUST
-</p>
-
-<p align="center">
-  <a href="https://arxiv.org/abs/2510.07231"><img src="https://img.shields.io/badge/arXiv-Paper-B31B1B.svg" alt="arXiv"></a>
-  <a href="https://github.com/econaikaist/econcausal-benchmark"><img src="https://img.shields.io/badge/GitHub-Repository-181717.svg" alt="GitHub"></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg" alt="License"></a>
 </p>
 
@@ -146,14 +136,14 @@ This dataset is released under the [Creative Commons Attribution-NonCommercial 4
 
 ## Citation
 
-If you use EconCausal in your research, please cite:
+Citation details will be added after the anonymous review period.
 
 ```bibtex
-@article{lee2025econcausal,
+@misc{anonymous2026econcausal,
   title={EconCausal: A Context-Aware Economic Reasoning Benchmark for Large Language Models},
-  author={Lee, Donggyu and Yun, Hyeok and Cha, Meeyoung and Park, Sungwon and Park, Sangyoon and Kim, Jihee},
-  journal={arXiv preprint arXiv:XXXX.XXXXX},
-  year={2025}
+  author={Anonymous Authors},
+  year={2026},
+  note={Anonymous submission}
 }
 ```
 
@@ -161,4 +151,4 @@ If you use EconCausal in your research, please cite:
 
 ## Contact
 
-For questions or feedback, send mail to donggyu.lee@kaist.ac.kr
+For questions during review, please use the anonymous review channel.
