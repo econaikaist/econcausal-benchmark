@@ -1,4 +1,4 @@
-<h1 align="center">EconCausal: A Context-Aware Causal Reasoning Benchmark for Large Language Models</h1>
+<h1 align="center">EconCausal: A Context-Aware Economic Reasoning Benchmark for Large Language Models</h1>
 
 <p align="center">
   <b>Donggyu Lee<sup>1</sup>, Hyeok Yun<sup>2</sup>, Meeyoung Cha<sup>3</sup>, Sungwon Park<sup>4*</sup>, Sangyoon Park<sup>5</sup>, Jihee Kim<sup>2*</sup></b>
@@ -150,7 +150,7 @@ If you use EconCausal in your research, please cite:
 
 ```bibtex
 @article{lee2025econcausal,
-  title={EconCausal: A Context-Aware Causal Reasoning Benchmark for Large Language Models in Social Science},
+  title={EconCausal: A Context-Aware Economic Reasoning Benchmark for Large Language Models},
   author={Lee, Donggyu and Yun, Hyeok and Cha, Meeyoung and Park, Sungwon and Park, Sangyoon and Kim, Jihee},
   journal={arXiv preprint arXiv:XXXX.XXXXX},
   year={2025}
