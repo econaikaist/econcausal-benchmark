@@ -22,10 +22,10 @@ Socio-economic causal effects depend heavily on their specific institutional and
 
 ### Key Findings
 
-- Top models achieve ~88% accuracy in fixed, explicit contexts
-- Performance **drops 32.6 pp** under context shifts (Task 2)
-- Performance **collapses to 37%** when misinformation is introduced (Task 3)
-- Models achieve only **9.5% accuracy** on null effects, exposing a fundamental gap between pattern matching and genuine causal reasoning
+- Top models achieve **~88% accuracy** in fixed, explicit contexts
+- For closed-source models, Task 2 accuracy drops **32.6 percentage points** on sign-mismatched cases (**73.9% to 41.3%**)
+- Under misleading signed evidence (Task 3), closed- and open-source models average only **49.3%** and **44.3%** accuracy, respectively
+- Across the four task rows, models achieve only **13.83% accuracy on `None`** and **22.82% on `mixed`**, exposing a substantial gap on non-directional effects
 
 ---
 
@@ -67,11 +67,11 @@ Given a context and a treatment-outcome pair, predict the causal sign. Tests whe
 
 ### Task 2: Context-Dependent Sign Prediction (284 instances)
 
-Given a known causal effect under context c1, predict the sign of the same treatment-outcome pair under a different context c2. Tests whether LLMs understand that causality is context-dependent.
+Given one known causal effect under context c1, predict the sign of the same treatment-outcome pair under a different context c2. Each released instance contains exactly one reference example, matching the main evaluation input.
 
 ### Task 3: Misinformation-Robust Sign Prediction (852 instances)
 
-Same as Task 2, but with deliberately incorrect sign information. Tests whether LLMs can discount misinformation and perform robust, context-grounded reasoning.
+Same as Task 2, but with one deliberately incorrect signed reference example. Each released instance contains exactly one reference example, matching the main evaluation input.
 
 ---
 
@@ -88,10 +88,8 @@ econcausal-benchmark/
 │   │   └── task3.*             # Task 3
 │   └── metadata/               # NBER paper metadata
 ├── prompts/
-│   └── evaluation/             # Benchmark task prompts (Tasks 1-3)
-├── scripts/
-│   ├── llm_evaluation/
-│   └── common/
+│   ├── evaluation/             # Benchmark task prompts (Tasks 1-3)
+│   └── pipeline/               # Dataset-construction prompt templates
 ├── figures/
 ├── LICENSE
 └── README.md
@@ -99,28 +97,11 @@ econcausal-benchmark/
 
 ---
 
-## Getting Started
+## Using the Dataset
 
-### Requirements
+The benchmark is released as static CSV and JSONL files under `data/`. The exact prompt presented for each benchmark instance is stored in its `question` field, and the expected label is stored in `answer`. Task 2 and Task 3 use exactly one reference example per instance, as in the main evaluation.
 
-```bash
-pip install openai pandas openpyxl tqdm numpy
-```
-
-### Running LLM Evaluation
-
-```bash
-cd scripts/llm_evaluation
-
-# Run all tasks with default models
-python run_evaluation.py
-
-# Run specific tasks
-python run_evaluation.py --tasks task1 task2
-
-# Run with specific models
-python run_evaluation.py --models openai gemini
-```
+This repository intentionally contains dataset artifacts and prompt templates only; API-specific evaluation runners are not included.
 
 ---
 
