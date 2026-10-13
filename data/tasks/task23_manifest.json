@@ -1,0 +1,69 @@
+{
+  "release_date": "2026-10-13",
+  "task2_count": 415,
+  "task2_sign_match_count": 291,
+  "task2_sign_mismatch_count": 124,
+  "unique_target_triplets": 273,
+  "unique_target_papers": 178,
+  "task3_count": 1245,
+  "task3_variants_per_pair": 3,
+  "labels": [
+    "+",
+    "-",
+    "None",
+    "mixed"
+  ],
+  "reference_examples_per_instance": 1,
+  "pair_filter": "Q2/Q4/Q5 >= 2 AND Q1 != DISTINCT AND Q3 != DISTINCT",
+  "pair_construction": {
+    "candidate_requirement": "Different papers sharing at least one exact full JEL code and a direct citation link.",
+    "candidate_pool_count": 67128,
+    "top_10_percent_review_count": 6712,
+    "similarity_ranking": "Minimum of treatment and outcome embedding cosine similarities, descending; ties use their mean descending, then pair_id ascending.",
+    "avg_similarity_field": "Mean of treatment and outcome embedding cosine similarities; this metadata field is not the primary ranking score.",
+    "Q1": "Treatment containment must not be DISTINCT.",
+    "Q2": "Treatment economic comparability score must be at least 2.",
+    "Q3": "Outcome containment must not be DISTINCT.",
+    "Q4": "Outcome economic comparability score must be at least 2.",
+    "Q5": "Treatment-outcome relation similarity score must be at least 2."
+  },
+  "excluded_pair_ids": [
+    "161582",
+    "193299"
+  ],
+  "task3_rule": "All three valid example signs except the original source-example sign; target gold and context remain fixed.",
+  "prompt_policy": "Task 2 and Task 3 use the same default prompt template. question contains only the displayed example treatment, outcome, context, sign and target treatment, outcome, context.",
+  "metadata_policy": "Answers, paper metadata, original signs and pairing fields are metadata; only question is presented to the model.",
+  "csv_policy": "List and object fields are JSON-encoded. example_details is a JSON-encoded string in both formats.",
+  "source_input_sha256": {
+    "task2": "453e2796c2cdb35cae8de46a924483891a9bd459b3f438decfc253cb4e28d35f",
+    "task3": "2916ae16f85920ee6d2a75ade04ae5f59d0a2f799c60ebab6ebfe45a62dd31d3"
+  },
+  "files": {
+    "prompts/evaluation/task2_context_dependent_sign_prediction.txt": {
+      "sha256": "82d806befce97b76df3a40a274f31e0a29c5e1efc78afbb9bcc4fdb5990ea511",
+      "bytes": 821
+    },
+    "data/tasks/task2.jsonl": {
+      "sha256": "a31ed7e249a1afc333fcd5ae7c624ce4df603888030e513ca7bc0d4fed0c95dd",
+      "bytes": 2387427
+    },
+    "data/tasks/task2.csv": {
+      "sha256": "ef8423d79a9a0edb822fc6accf676fb0605d79065cd0f568737a7dc44ebf153a",
+      "bytes": 2198818
+    },
+    "prompts/evaluation/task3_misinformation_robust_sign_prediction.txt": {
+      "sha256": "82d806befce97b76df3a40a274f31e0a29c5e1efc78afbb9bcc4fdb5990ea511",
+      "bytes": 821
+    },
+    "data/tasks/task3.jsonl": {
+      "sha256": "b0bf0777d441e444099531d0ed6c8ec8c3b1ae86fad7a1a5c479caab76a4f610",
+      "bytes": 7561964
+    },
+    "data/tasks/task3.csv": {
+      "sha256": "1bf164e24ecaa819a42683a486c901be52054cdd62063d1db8570f08ed0cffd9",
+      "bytes": 6830025
+    }
+  },
+  "new_inference_calls": 0
+}

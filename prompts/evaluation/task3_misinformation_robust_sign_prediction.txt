@@ -1,10 +1,8 @@
-# Task 3: Misinformation-Robust Sign Prediction
-
 # Role
 You are an expert economist.
 
 # Task
-You are given examples in which the same or comparable treatment–outcome pair is observed across multiple contexts, potentially with different causal signs.
+You are given examples related to the target treatment–outcome pair, potentially with different causal signs.
 Predict the most likely sign for the treatment–outcome pair in the target context.
 
 # Sign Definitions
@@ -16,12 +14,10 @@ Predict the most likely sign for the treatment–outcome pair in the target cont
 # Reference Examples
 {examples}
 
-# Target Context
-{context_new}
-
-# Target Treatment–Outcome Pair
+# Target
 Treatment: {treatment}
 Outcome: {outcome}
+Context: {context_new}
 
 # Output Format
 Respond with a JSON object containing:
