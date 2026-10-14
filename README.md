@@ -22,10 +22,10 @@ Socio-economic causal effects depend heavily on their specific institutional and
 
 ### Key Findings
 
-- Top models achieve ~88% accuracy in fixed, explicit contexts
-- Performance **drops 32.6 pp** under context shifts (Task 2)
-- Performance **collapses to 37%** when misinformation is introduced (Task 3)
-- Models achieve only **9.5% accuracy** on null effects, exposing a fundamental gap between pattern matching and genuine causal reasoning
+- Top models achieve **~84% accuracy** in fixed, explicit contexts (Task 1).
+- Across 19 models, Task 2 accuracy is **74.75% overall** and **44.27% on sign-mismatch pairs**, a **30.48 percentage-point gap** between these evaluation sets.
+- With deliberately corrupted reference signs (Task 3), average accuracy is **58.66%**.
+- Across the four task rows (Task 1 Economics, Task 1 Finance, Task 2, and Task 3), models achieve only **19.16% accuracy on `None`** and **35.22% on `mixed`**.
 
 ---
 
@@ -65,13 +65,17 @@ EconCausal includes three progressively challenging evaluation tasks probing con
 
 Given a context and a treatment-outcome pair, predict the causal sign. Tests whether LLMs can internalize economic causalities from peer-reviewed research.
 
-### Task 2: Context-Dependent Sign Prediction (284 instances)
+### Task 2: Context-Dependent Sign Prediction (415 reference–target pairs)
 
-Given a known causal effect under context c1, predict the sign of the same treatment-outcome pair under a different context c2. Tests whether LLMs understand that causality is context-dependent.
+Given one correctly signed reference example under context c1, predict the study-reported sign for a comparable treatment–outcome pair under target context c2. Each released instance contains exactly one reference example and the exact question used in the main evaluation. The 415 pairs cover **273 unique target triplets from 178 target papers**; **124 pairs** have different source and target signs. Sign-mismatch is a subset of Task 2, not a separate task.
 
-### Task 3: Misinformation-Robust Sign Prediction (852 instances)
+Pairs are drawn from papers that share a JEL code and have a direct citation link. Treatment and outcome phrases are embedded separately with `text-embedding-3-small`; the smaller of their cosine similarities is the matching score. The top 10% of 67,128 candidate pairs (6,712 pairs; threshold approximately 0.36) undergo a five-question comparability assessment by GPT-5.6 Luna. Retained pairs score at least 2 out of 3 on treatment comparability (Q2), outcome comparability (Q4), and causal-relation similarity (Q5); neither treatment nor outcome containment may be `DISTINCT` under Q1/Q3. The release excludes the two pairs that failed this final containment check.
 
-Same as Task 2, but with deliberately incorrect sign information. Tests whether LLMs can discount misinformation and perform robust, context-grounded reasoning.
+### Task 3: Misinformation-Robust Sign Prediction (1,245 instances)
+
+For each Task 2 pair, replace the reference's original sign with each of the **three other labels** in `+`, `-`, `None`, and `mixed`. This produces exactly three variants per pair while preserving the target context, treatment, outcome, and gold sign. A corrupted reference sign may coincide with the target's gold sign; corruption is defined relative to the reference's original sign. Each question uses the same prompt template as Task 2, without telling the model that the reference is corrupted.
+
+The current release matches the 19-model main evaluation. Accuracy and Macro F1 retain invalid or missing predictions in the denominator; Macro F1 uses all four labels and assigns zero to undefined class F1. Published group and overall averages equally weight models.
 
 ---
 
@@ -85,13 +89,12 @@ econcausal-benchmark/
 │   │   ├── task1_econ.*        # Task 1 - Economics
 │   │   ├── task1_finance.*     # Task 1 - Finance
 │   │   ├── task2.*             # Task 2
-│   │   └── task3.*             # Task 3
+│   │   ├── task3.*             # Task 3
+│   │   └── task23_manifest.json # Counts, selection rules, and SHA-256 hashes
 │   └── metadata/               # NBER paper metadata
 ├── prompts/
-│   └── evaluation/             # Benchmark task prompts (Tasks 1-3)
-├── scripts/
-│   ├── llm_evaluation/
-│   └── common/
+│   ├── evaluation/             # Benchmark task prompts (Tasks 1-3)
+│   └── pipeline/               # Dataset-construction prompt templates
 ├── figures/
 ├── LICENSE
 └── README.md
@@ -99,28 +102,13 @@ econcausal-benchmark/
 
 ---
 
-## Getting Started
+## Using the Dataset
 
-### Requirements
+The benchmark is released as static CSV and JSONL files under `data/`. The exact prompt presented for each benchmark instance is stored in its `question` field, and the expected label is stored in `answer`. Task 2 and Task 3 use exactly one reference example per instance, as in the main evaluation. CSV stores nested objects and lists as JSON strings; JSONL preserves their native structure. The label `None` is a literal string, not a missing value.
 
-```bash
-pip install openai pandas openpyxl tqdm numpy
-```
+Use `question` as the model input. Keep `answer`, `expected_sign`, source-paper metadata, and Task 3's `original_sign` outside the model message. `case_id` and `pair_id` identify the frozen pairs, and Task 3's `source_task2_case_id` links each variant to its Task 2 question. Original signs are released for auditing the corruption rule only.
 
-### Running LLM Evaluation
-
-```bash
-cd scripts/llm_evaluation
-
-# Run all tasks with default models
-python run_evaluation.py
-
-# Run specific tasks
-python run_evaluation.py --tasks task1 task2
-
-# Run with specific models
-python run_evaluation.py --models openai gemini
-```
+The current Task 2/3 benchmark is defined by these frozen files and their manifest. This repository contains dataset artifacts and prompt templates; API-specific evaluation runners are not included.
 
 ---
 
